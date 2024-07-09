@@ -25,5 +25,10 @@
 # <h2 align="center">Features By <a href=https://github.com/BalaPriyan>BalaPriyan</a></h2>
 
 <ul>
+  <li>Migrated To Hydrogram</li>
   <li>Shortener</li>
 </ul>
+
+
+# Thanks For All The Member Who Have Added Features Before.
+
