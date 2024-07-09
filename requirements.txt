@@ -1,0 +1,8 @@
+aiohttp
+git+https://github.com/hydrogram/hydrogram.git@dev
+python-dotenv
+tgcrypto
+motor
+aiofiles
+dnspython
+pymongo
