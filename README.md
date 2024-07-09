@@ -6,7 +6,7 @@
 
 <p align="center">This Repo Is Moded From The <a herf=https://github.com/DeekshithSH/FileStreamBot>DeekshithSH/FileStreamBot</a>, Which Is Highly Optimized File To Link Telegram Bot Which Provide <b>HTTPS</b> For The Telegram Files</p>
 
-# <h2 align="center">Features By <a hrerf=https://github.com/DeekshithSH/FileStreamBot>DeekshithSH/FileStreamBot</a><h2>
+# <h2 align="center">Features By <a href=https://github.com/DeekshithSH/FileStreamBot>DeekshithSH/FileStreamBot</a><h2>
 
 <ul>
   <li>Clean User Interface</li>
