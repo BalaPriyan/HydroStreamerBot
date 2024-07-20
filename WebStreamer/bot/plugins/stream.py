@@ -14,7 +14,7 @@ from hydrogram.types import Message
 from hydrogram.enums.parse_mode import ParseMode
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-@StreamBot.on_message(filters.command("link","url"))
+@StreamBot.on_message(filters.command(["link", "url"]))
 async def private_receive_handler(bot: Client, message: Message):
     lang = Language(message)
     if not await validate_user(message, lang):
