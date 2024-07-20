@@ -1,6 +1,3 @@
-# This file is a part of FileStreamBot
-
-
 import asyncio
 from WebStreamer.utils.Translation import Language
 from WebStreamer.bot import StreamBot, multi_clients
@@ -14,7 +11,20 @@ from hydrogram.types import Message
 from hydrogram.enums.parse_mode import ParseMode
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-@StreamBot.on_message(filters.command(["link", "url"]))
+@StreamBot.on_message(
+    filters.private
+    & (
+        filters.document
+        | filters.video
+        | filters.audio
+        | filters.animation
+        | filters.voice
+        | filters.video_note
+        | filters.photo
+        | filters.sticker
+    ),
+    group=4,
+)
 async def private_receive_handler(bot: Client, message: Message):
     lang = Language(message)
     if not await validate_user(message, lang):
