@@ -1,5 +1,6 @@
 aiohttp
-git+https://github.com/hydrogram/hydrogram.git@dev
+#git+https://github.com/hydrogram/hydrogram.git@dev
+pyroblack
 python-dotenv
 tgcrypto
 motor
