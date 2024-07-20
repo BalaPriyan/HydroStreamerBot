@@ -2,9 +2,6 @@
 
 import datetime
 import math
-import requests
-import string
-import random
 from WebStreamer import __version__
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.bot_utils import file_format
@@ -14,26 +11,7 @@ from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.server.exceptions import FIleNotFound
 from hydrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME,Var.SHORTLINK_URL,Var.SHORTLINK_API,Var.SHORTENER)
-
-
-def generate_random_alphanumeric(): 
-    """Generate a random 8-letter alphanumeric string.""" 
-    characters = string.ascii_letters + string.digits 
-    random_chars = ''.join(random.choice(characters) for _ in range(8)) 
-    return random_chars 
-
-
-def get_shortlink(url): 
-    short = requests.get(f"https://{Var.SHORTLINK_URL}/api?api={Var.SHORTLINK_API}&url={url}&alias={generate_random_alphanumeric()}") 
-    sjson = short.json() 
-    if sjson["status"] == "success" or short.status_code == 200: 
-        return sjson["shortenedUrl"] 
-    else: 
-        return url 
-
-
-
+db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 @StreamBot.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
@@ -116,17 +94,9 @@ async def gen_file_menu(_id, file_list_no, update: CallbackQuery):
         return
 
     file_type=file_format(myfile_info['file_id'])
-    
+
     page_link = f"{Var.URL}watch/{myfile_info['_id']}"
     stream_link = f"{Var.URL}dl/{myfile_info['_id']}"
-
-    if Var.SHORTENER == True :
-        stream = get_shortlink(stream_link)
-        page = get_shortlink(page_link)
-    else:
-        stream = stream_link
-        page = page_link
-    
     TiMe=myfile_info['time']
     if type(TiMe) == float:
         date = datetime.datetime.fromtimestamp(TiMe)
@@ -135,7 +105,7 @@ async def gen_file_menu(_id, file_list_no, update: CallbackQuery):
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Back", callback_data="userfiles_{}".format(file_list_no)), InlineKeyboardButton("Delete Link", callback_data=f"msgdelconf2_{myfile_info['_id']}_{file_list_no}")],
-                [InlineKeyboardButton("🖥STREAM", url=page), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream)],
+                [InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
                 [InlineKeyboardButton("Get File", callback_data=f"sendfile_{myfile_info['_id']}")]
             ]
             )
