@@ -1,19 +1,19 @@
 {
-    "name": "File Stream Bot",
-    "description": "A Pyrogram Telegram bot to access Telegram Files via the web.",
+    "name": "Hyro Streamer Bot",
+    "description": "A Hydogram Telegram bot to access Telegram Files via the web.",
     "keywords": [
         "telegram",
         "web",
-        "pyrogram",
+        "Hyrogram",
         "aiohttp",
         "python",
         "plugin",
         "modular",
         "media"
       ],
-    "repository": "https://github.com/SpringsFern/FileStreamBot",
+    "repository": "https://github.com/BalaPriyan/HydroStreamerBot",
     "success_url": "/",
-    "website": "https://github.com/SpringsFern/FileStreamBot",
+    "website": "https://github.com/BalaPriyan/HydroStreamerBot",
     "env": {
         "ENV": {
             "description": "Set this to True if you don't want to crash the bot",
@@ -98,7 +98,7 @@
     "formation": {
         "web": {
             "quantity": 1,
-            "size": "Eco"
+            "size": "Basic"
         }
     }
   }
