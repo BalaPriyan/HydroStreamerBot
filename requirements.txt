@@ -6,4 +6,3 @@ motor
 aiofiles
 dnspython
 pymongo
-requests
