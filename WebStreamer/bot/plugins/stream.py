@@ -1,6 +1,3 @@
-# This file is a part of FileStreamBot
-
-
 import asyncio
 from WebStreamer.utils.Translation import Language
 from WebStreamer.bot import StreamBot, multi_clients
