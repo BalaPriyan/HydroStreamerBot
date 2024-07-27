@@ -2,284 +2,187 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:image" content="https://i.ibb.co/M8S0Zzj/live-streaming.png" itemprop="thumbnailUrl">
+    <meta property="og:image" content="z" itemprop="thumbnailUrl">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>%s</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Delius">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:300,400,600|Delius:400">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <style>
-        marquee {
-            font-size: 22px;
-            color: #ffffff;
-            font-family: serif;
+        :root {
+            --bg-color: #333333;
+            --text-color: #ffffff;
+            --accent-color: #007BFF;
+            --footer-bg-color: #444444;
+            --footer-text-color: #bbbbbb;
+            --footer-icon-color: #ffffff;
+            --video-bg: url('https://telegra.ph/file/fbaab29eb3038f705b76c.jpg');
         }
+
         body {
-            font-family: sans-serif;
-            font-size: 16px;
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
-            background-color: #1c1c1c;
-            color: #ffffff;
         }
-        #player-container {
-            margin: 1px;
-        }
-        .container {
-            overflow: hidden;
-            *zoom: 1;
-            margin: 0 1px;
-            margin-bottom: 20px;
-        }
-        .set-container {
-            padding: 15px;
-        }
-        .containerbox {
-            overflow: hidden;
-            *zoom: 1;
-            margin-bottom: 70px;
-        }
-        .mainupdates {
-            overflow: hidden;
-            *zoom: 1;
-            margin-bottom: 60px;
-        }
-        #info-box {
-            border: 1px solid #140cf0;
-            border-radius: 10px;
-            padding: 5px;
-            width: auto;
-            text-align: left;
-            margin: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            word-wrap: break-word;
-            background-color: #2c2c2c;
-        }
-        #button-container1 {
+
+        header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #555;
         }
-        #button-container1 button {
-            flex: 1 0 auto;
-            height: 40px;
-            padding: 0 20px;
-            margin: 5px;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
+
+        .toggle {
+            width: 24px;
+            height: 24px;
             cursor: pointer;
-            transition: box-shadow 0.3s, background-color 0.3s, color 0.3s;
+            background-color: var(--accent-color);
+            border-radius: 50%;
         }
-        #button-container1 button:hover {
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+
+        #file-name {
+            font-family: 'Delius', sans-serif;
+            font-size: 1.5rem;
         }
-        #button-container2 {
+
+        .container {
             display: flex;
             flex-direction: column;
-            align-items: stretch;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
         }
-        #button-container2 button {
-            height: 40px;
-            padding: 0 20px;
-            margin: 5px;
-            font-size: 16px;
+
+        .player {
+            width: 100%;
+            max-width: 800px;
+            background: var(--video-bg) no-repeat center center;
+            background-size: cover;
+        }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--footer-bg-color);
+            color: var(--footer-text-color);
+            border-top: 1px solid #555;
+        }
+
+        .button-container {
+            margin-top: 1rem;
+        }
+
+        .button {
+            background-color: var(--accent-color);
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: box-shadow 0.3s, background-color 0.3s, color 0.3s;
-        }
-        #button-container2 button:hover {
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-        #button-container2 button#dl-btn, #button-container2 button#copy-btn {
-            background-color: #2D76FF; 
-            color: #ffffff;
-        }
-        .dropbtn {
-            background-color: #2D76FF;
             color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 4px;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
+            padding: 0.5rem 1rem;
+            text-align: center;
             text-decoration: none;
-            display: block;
-            border-radius: 4px;
-        }
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
+            display: inline-block;
+            font-size: 1rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            border-radius: 0.25rem;
         }
 
-        .dropdown:hover .dropbtn {
-            background-color: #1a5bb8;
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .dark {
+            --bg-color: #333333;
+            --text-color: #ffffff;
+            --footer-bg-color: #444444;
+            --footer-text-color: #bbbbbb;
+            --footer-icon-color: #ffffff;
+        }
+
+        .light {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --footer-bg-color: #f8f9fa;
+            --footer-text-color: #6c757d;
+            --footer-icon-color: #007BFF;
         }
     </style>
 </head>
+
 <body class="dark">
-<div class="set-container">
-    <div class="container">
     <header>
-        <marquee bgcolor="#808080">
-            <div class="toogle"></div>
-            <div id="file-name">%s</div>
-        </marquee>
+        <div class="toggle"></div>
+        <div id="file-name" class="cyber">%s</div>
     </header>
-    <tag src="%s" class="player"></tag>
-    </div>
-    <div class="containerbox">
-        <div style="margin-bottom: 5px; margin-top: 10px;"></div>
-        <div id="button-container1">
-            <div class="dropdown">
-                <button class="dropbtn">Stream Options</button>
-                <div class="dropdown-content">
-                    <a href="#" onclick="playOnline('vlc')">VLC Player</a>
-                    <a href="#" onclick="playOnline('mx')">MX Mobile</a>
-                    <a href="#" onclick="playOnline('sp')">SPlayer</a>
-                    <a href="#" onclick="playOnline('jp')">JPlayer</a>
-                    <a href="#" onclick="playOnline('all')">AllPlayer</a>
-                    <a href="#" onclick="playOnline('km')">KMPlayer</a>
-                </div>
-            </div>
-        </div>
-        <div id="button-container2">
-            <button id="dl-btn" onclick="download()">
-                <i class="fas fa-download"></i> Download Now ☁
-            </button>
-            <button id="copy-btn" onclick="copyLink()">
-                <i class="fas fa-copy"></i> Copy Link 🔗
-            </button>
+
+    <div class="container">
+        <video class="player" playsinline controls>
+            <source src="%s" type="video/mp4" />
+        </video>
+        <div class="button-container">
+            <button class="button" id="download-button">Download Video</button>
+            <button class="button" id="copy-link-button">Copy Link</button>
         </div>
     </div>
-    <div class="containerbox">
-        <div id="info-box">
-            <p style="font-size: 15px; color:#ffffff;"><FONT COLOR="#ff0000"><u><b>𝐍𝐨𝐭𝐞</u> :</b></FONT> ɪꜰ ʏᴏᴜ ꜰɪɴᴅ ᴀɴʏ ʙʀᴏᴋᴇɴ ʟɪɴᴋ ᴛʜᴇɴ ᴘʟᴇᴀꜱᴇ ʀᴇᴘᴏʀᴛ ᴛᴏ ᴍʏ <a href="https://telegram.me/TeamShoGuN" style="color: blue"><b>sᴜᴘᴘᴏʀᴛ ᴛᴇᴀᴍ</b></a></p>
-        </div>
-    </div>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="mainupdates">
-        <center>
-            <div style="margin-bottom: 10px; margin-top: 20px;">𝐉𝐨𝐢𝐧 𝐎𝐮𝐫 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 𝐅𝐨𝐫 𝐌𝐨𝐫𝐞 𝐔𝐩𝐝𝐚𝐭𝐞𝐬 ❤️</div>
-            <h3>
-                <b>
-                    <a href="https://telegram.me/TeamShoGuN">
-                        <img src="https://img.shields.io/badge/Updates-Channel-blueviolet?style=for-the-badge" alt="Channel">
-                    </a>
-                </b>
-            </h3>
-        </center>
-    </div>
-    </div>
-</div>
-
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-<script>
-    const controls = [
-          'play-large',
-          'rewind',
-          'play', 
-          'fast-forward', 
-          'progress', 
-          'current-time',
-          'duration',
-          'settings',
-          'fullscreen'
-        ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const player = Plyr.setup('.player', { controls });
-    });
-
-    const currentUrl = window.location.href;
-    const finalUrl = currentUrl.replace("/watch/", "/dl/");
-
-    function playOnline(player) {
-        const finalLinkUrl = finalUrl;
-        let url;
-        switch(player) {
-            case 'vlc':
-            url = `vlc://${finalLinkUrl}`;
-                break;
-            case 'mx':
-                url = `intent:${finalLinkUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
-                break;
-            case 'sp':
-                url = `intent:${finalLinkUrl}#Intent;action=com.young.simple.player.playback_online;package=com.young.simple.player;end`;
-                break;
-            case 'jp':
-                url = `intent:${finalLinkUrl}#Intent;package=com.example.jplayer;end`;
-                break;
-            case 'all':
-                url = `intent:${finalLinkUrl}#Intent;package=com.allplayer.remote;end`;
-                break;
-            case 'km':
-                url = `intent:${finalLinkUrl}#Intent;package=com.kmplayer;end`;
-                break;
-            default:
-                url = finalLinkUrl;
-        }
-        window.location.href = url;
-    }
-
-    function download() {
-        const finalLinkUrl = finalUrl;
-        window.location.href = finalLinkUrl;
-    }
-
-    function copyLink() {
-        const finalLinkUrl = finalUrl;
-        navigator.clipboard.writeText(finalLinkUrl).then(() => {
-            alert('Link copied to clipboard!');
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const player = Plyr.setup('.player', { controls });
-    });
-
-    const body = document.querySelector('body');
-    const footer = document.querySelector('footer');
-    const toogle = document.querySelector('.toogle');
-    toogle.onclick = () => {
-        body.classList.toggle('dark');
-        footer.classList.toggle('dark');
-    }
-</script>
-<div>
+    
     <footer>
-        <p style="font-size: 12px; color:#7b89a3;padding-top: 30px ;margin:0px 10px; border-top: 1px solid #c2cee3; text-align:center">&copy; This website only provides a service that helps you to play your videos online without downloading.</p>
+        <!-- Footer content if needed -->
     </footer>
-</div>
+    
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        const controls = [
+            'play-large',
+            'rewind',
+            'play',
+            'fast-forward',
+            'progress',
+            'current-time',
+            'duration',
+            'mute',
+            'volume',
+            'captions',
+            'settings',
+            'pip',
+            'airplay',
+            'fullscreen'
+        ];
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = new Plyr('.player', { controls });
+        });
+
+        const body = document.querySelector('body');
+        const toggle = document.querySelector('.toggle');
+        toggle.onclick = () => {
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                body.classList.add('light');
+            } else {
+                body.classList.remove('light');
+                body.classList.add('dark');
+            }
+        }
+
+        document.getElementById('download-button').onclick = () => {
+            const videoSource = document.querySelector('.player source').src;
+            const link = document.createElement('a');
+            link.href = videoSource;
+            link.download = videoSource.substring(videoSource.lastIndexOf('/') + 1);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        document.getElementById('copy-link-button').onclick = () => {
+            const videoSource = document.querySelector('.player source').src;
+            navigator.clipboard.writeText(videoSource).then(() => {
+                alert('Link copied to clipboard');
+            });
+        };
+    </script>
 </body>
 </html>
