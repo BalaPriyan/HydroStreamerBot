@@ -147,7 +147,7 @@
     <p>This website only provides a service that helps you to play your videos online without downloading.</p>
 </footer>
 
-<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const player = new Plyr('.player', {
@@ -162,10 +162,8 @@
             quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240] }
         });
     });
-
     const currentUrl = window.location.href;
     const finalUrl = currentUrl.replace("/watch/", "/dl/");
-
     function playOnline(player) {
         switch(player) {
             case 'vlc':
@@ -188,11 +186,9 @@
                 break;
         }
     }
-
     function download() {
         window.location.href = finalUrl;
     }
-
     function copyLink() {
         navigator.clipboard.writeText(finalUrl).then(function() {
             alert("Link copied to clipboard!");
@@ -200,12 +196,10 @@
             console.error('Could not copy text: ', err);
         });
     }
-
     function openTgBot() {
         const createLinkUrl = "https://telegram.dog/";
         window.open(createLinkUrl, "_blank");
     }
-
     function openModalTG() {
         const modal = document.getElementById("myModal");
         modal.style.display = "block";
@@ -230,12 +224,10 @@
             }
         }, 1000);
     }
-
     function TGre() {
         const tglink = "";
         window.location.href = tglink;
     }
-
     function openModal() {
         const modal = document.getElementById("myModal");
         modal.style.display = "block";
@@ -260,7 +252,6 @@
             }
         }, 1000);
     }
-
     const body = document.querySelector('body');
     const footer = document.querySelector('footer');
     const toogle = document.querySelector('.toogle');
