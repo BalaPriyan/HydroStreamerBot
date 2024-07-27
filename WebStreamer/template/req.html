@@ -38,12 +38,15 @@
         }
         .containerbox {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
             background-color: #1a1a1a;
             padding: 20px 0;
+        }
+        .containerbox > * {
+            width: 200px;
         }
         .mainupdates {
             overflow: hidden;
@@ -62,6 +65,7 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            width: 100%;
         }
         .dropdown-content {
             display: none;
@@ -92,6 +96,7 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            width: 50%;
         }
         #dl-btn:hover, #link-btn:hover {
             background-color: #0056b3;
@@ -122,14 +127,12 @@
      </div>
     <div class="containerbox">
         <div class="dropdown">
-            <button class="dropbtn">Stream Options ▼</button>
+            <button class="dropbtn">Stream ▼</button>
             <div class="dropdown-content">
-                <a href="#" onclick="playOnline('vlc')">VLC Player</a>
-                <a href="#" onclick="playOnline('mx')">MX Mobile</a>
-                <a href="#" onclick="playOnline('sp')">SPlayer</a>
-                <a href="#" onclick="playOnline('jplayer')">JPlayer</a>
-                <a href="#" onclick="playOnline('allplayer')">AllPlayer</a>
-                <a href="#" onclick="playOnline('kmplayer')">KMPlayer</a>
+                <a href="#" onclick="playOnline('vlc')">VLC Mobile</a>
+                <a href="#" onclick="playOnline('mxp')">MX Player Pro</a>
+                <a href="#" onclick="playOnline('mx')">MX Player</a>
+                <a href="#" onclick="playOnline('np')">nPlayer</a>
             </div>
         </div>
         <button id="dl-btn" onclick="download()">Download Video ☁️</button>
@@ -172,17 +175,11 @@
             case 'mx':
                 window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
                 break;
-            case 'sp':
-                window.location.href = `intent:${finalUrl}#Intent;action=com.young.simple.player.playback_online;package=com.young.simple.player;end`;
+            case 'mxp':
+                window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.pro;end`;
                 break;
-            case 'jplayer':
-                // Add JPlayer URL scheme here
-                break;
-            case 'allplayer':
-                // Add AllPlayer URL scheme here
-                break;
-            case 'kmplayer':
-                // Add KMPlayer URL scheme here
+            case 'np':
+                window.location.href = `intent:${finalUrl}#Intent;package=com.newin.nplayer.pro;end`;
                 break;
         }
     }
