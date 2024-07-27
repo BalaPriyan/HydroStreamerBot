@@ -118,7 +118,11 @@
             </div>
         </marquee>
     </header>
-        <tag src="%s" class="player"></tag>
+        <video class="player" playsinline controls data-poster="%s">
+            <source src="%s" type="video/mp4" />
+            <!-- Add captions if available -->
+            <!-- <track kind="captions" label="English" srclang="en" src="path/to/captions.vtt" default /> -->
+        </video>
     </div>
     <div class="containerbox">
         <div class="dropdown">
@@ -147,14 +151,25 @@
     <p>This website only provides a service that helps you to play your videos online without downloading.</p>
 </footer>
 
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 <script>
-    const controls = [
-        'play-large', 'rewind', 'play', 'fast-forward', 'progress',
-        'current-time', 'duration', 'captions', 'settings', 'fullscreen'
-    ];
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = new Plyr('.player', {
+            controls: [
+                'play-large', 'restart', 'rewind', 'play', 'fast-forward', 'progress', 'current-time',
+                'duration', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'
+            ],
+            settings: ['captions', 'quality', 'speed', 'loop'],
+            tooltips: { controls: true, seek: true },
+            keyboard: { focused: true, global: true },
+            captions: { active: true, language: 'auto', update: true },
+            quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240] }
+        });
+    });
+
     const currentUrl = window.location.href;
     const finalUrl = currentUrl.replace("/watch/", "/dl/");
+
     function playOnline(player) {
         switch(player) {
             case 'vlc':
@@ -177,9 +192,11 @@
                 break;
         }
     }
+
     function download() {
         window.location.href = finalUrl;
     }
+
     function copyLink() {
         navigator.clipboard.writeText(finalUrl).then(function() {
             alert("Link copied to clipboard!");
@@ -187,10 +204,12 @@
             console.error('Could not copy text: ', err);
         });
     }
+
     function openTgBot() {
         const createLinkUrl = "https://telegram.dog/";
         window.open(createLinkUrl, "_blank");
     }
+
     function openModalTG() {
         const modal = document.getElementById("myModal");
         modal.style.display = "block";
@@ -215,10 +234,12 @@
             }
         }, 1000);
     }
+
     function TGre() {
         const tglink = "";
         window.location.href = tglink;
     }
+
     function openModal() {
         const modal = document.getElementById("myModal");
         modal.style.display = "block";
@@ -243,13 +264,7 @@
             }
         }, 1000);
     }
-    document.addEventListener('DOMContentLoaded', () => {
-        const player = Plyr.setup('.player', { 
-            controls,
-            captions: { active: true, update: true },
-            settings: ['captions', 'quality', 'speed', 'loop']
-        });
-    });
+
     const body = document.querySelector('body');
     const footer = document.querySelector('footer');
     const toogle = document.querySelector('.toogle');
