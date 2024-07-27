@@ -2,70 +2,258 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:image" content="https://www.flaticon.com/premium-icon/icons/svg/2626/2626281.svg" itemprop="thumbnailUrl">
+    <meta property="og:image" content="https://i.ibb.co/M8S0Zzj/live-streaming.png" itemprop="thumbnailUrl">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>%s</title>
-    <link rel="stylesheet" type='text/css' href="https://drive.google.com/uc?export=view&id=1pVLG4gZy7jdow3sO-wFS06aP_A9QX0O6">
+    
+    <link rel="icon" href="https://raw.githubusercontent.com/TahirDea/Resources/main/ICON.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Delius">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.6/plyr.css" />
-    <!-- <link rel="stylesheet" href="style.css"> -->
-
-</head>
-
-<body>
-    <header>
-        <div class="toogle"></div>
-        <div id="file-name" class="cyber">
-            %s
-        </div>
-    </header>
-
-    <div class="container">
-        <tag src="%s" class="player"></tag>
-    </div>
-    
-    <footer>
-        <span id="fork-text">Fork me on</span>
-        <span>
-            <a href="https://github.com/DeekshithSH/FileStreamBot" id='github-logo'>
-                <svg id='octo' style="width: 1.2rem; padding-left: 5px; fill: var(--footer-icon-color)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            </a>
-        </span>
-    </footer>
-    
-    
-    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
-	<script>
-        const controls = [
-              'play-large',
-              'rewind',
-              'play', 
-              'fast-forward', 
-              'progress', 
-              'current-time',
-              'duration',
-              'mute',
-              'volume',
-              'captions',
-              'settings',
-              'pip',
-              'airplay',
-              'download',
-              'fullscreen'
-            ];
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = Plyr.setup('.player', { controls });
-        });
-
-        const body = document.querySelector('body');
-        const footer = document.querySelector('footer');
-        const toogle = document.querySelector('.toogle');
-        toogle.onclick = () => {
-            body.classList.toggle('dark')
-            footer.classList.toggle('dark')
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #ffffff;
         }
-    </script>
+        marquee {
+            font-size: 22px;
+            color: #ffffff;
+            font-family: serif;
+        }
+        #player-container {
+            margin: 1px;
+        }
+        .container {
+            overflow: hidden;
+            *zoom: 1;
+            margin: 0 1px;
+            margin-bottom: 20px;
+        }
+        .set-container {
+            padding: 15px;
+        }
+        .containerbox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background-color: #1a1a1a;
+            padding: 20px 0;
+        }
+        .mainupdates {
+            overflow: hidden;
+            *zoom: 1;
+            margin-bottom: 60px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {background-color: #f1f1f1}
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: #0056b3;
+        }
+        #dl-btn, #link-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #dl-btn:hover, #link-btn:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .updates-channel {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="set-container">
+    <div class="container">
+    <header>
+        <marquee bgcolor="#333333">
+            <div class="toogle"></div>
+            <div id="file-name">
+                %s
+            </div>
+        </marquee>
+    </header>
+        <tag src="%s" class="player"></tag>
+     </div>
+    <div class="containerbox">
+        <div class="dropdown">
+            <button class="dropbtn">Stream ▼</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="playOnline('vlc')">VLC Mobile</a>
+                <a href="#" onclick="playOnline('mxp')">MX Player Pro</a>
+                <a href="#" onclick="playOnline('mx')">MX Player</a>
+                <a href="#" onclick="playOnline('np')">nPlayer</a>
+            </div>
+        </div>
+        <button id="dl-btn" onclick="download()">Download Video ☁️</button>
+        <button id="link-btn" onclick="copyLink()">Copy Link 🔗</button>
+    </div>
+</div>  
+                 
+<footer>
+    <div class="updates-channel">
+        <!-- Modify Below link -->
+        <a href="https://telegram.me/TeamShoGuN" target="_blank">
+            <img src="https://img.shields.io/badge/Updates-Channel-blueviolet?style=for-the-badge" alt="Updates Channel">
+        </a>
+    </div>
+    <p>Join our channel for more updates ❤️</p>
+    <p>This website only provides a service that helps you to play your videos online without downloading.</p>
+</footer>
+
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = new Plyr('.player', {
+            controls: [
+                'play-large', 'restart', 'rewind', 'play', 'fast-forward', 'progress', 'current-time',
+                'duration', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'
+            ],
+            settings: ['captions', 'quality', 'speed', 'loop'],
+            tooltips: { controls: true, seek: true },
+            keyboard: { focused: true, global: true },
+            captions: { active: true, language: 'auto', update: true },
+            quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240] }
+        });
+    });
+    const currentUrl = window.location.href;
+    const finalUrl = currentUrl.replace("/watch/", "/dl/");
+    function playOnline(player) {
+        switch(player) {
+            case 'vlc':
+                window.location.href = `vlc://${finalUrl}`;
+                break;
+            case 'mx':
+                window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
+                break;
+            case 'mxp':
+                window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.pro;end`;
+                break;
+            case 'np':
+                window.location.href = `intent:${finalUrl}#Intent;package=com.newin.nplayer.pro;end`;
+                break;
+        }
+    }
+    function download() {
+        window.location.href = finalUrl;
+    }
+    function copyLink() {
+        navigator.clipboard.writeText(finalUrl).then(function() {
+            alert("Link copied to clipboard!");
+        }, function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    }
+    function openTgBot() {
+        const createLinkUrl = "https://telegram.dog/";
+        window.open(createLinkUrl, "_blank");
+    }
+    function openModalTG() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "block";
+        const words = [
+            "Received File request...✅",
+            "Processing your request...⌛",
+            "Generating your link...🔗",
+            "Sending link to you...🚀",
+            "Redirecting To Telegram...😉"
+        ];
+        let index = 0;
+        const timerElement = document.getElementById("timer");
+        timerElement.innerText = words[index];
+        const timer = setInterval(() => {
+            index++;
+            if (index < words.length) {
+                timerElement.innerText = words[index];
+            } else {
+                clearInterval(timer);
+                TGre();
+                modal.style.display = "none";
+            }
+        }, 1000);
+    }
+    function TGre() {
+        const tglink = "";
+        window.location.href = tglink;
+    }
+    function openModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "block";
+        const words = [
+            "Received Download request...✅",
+            "Processing your request...⌛",
+            "Generating your link...🔗",
+            "Sending link to you...🚀",
+            "Download has started...😉"
+        ];
+        let index = 0;
+        const timerElement = document.getElementById("timer");
+        timerElement.innerText = words[index];
+        const timer = setInterval(() => {
+            index++;
+            if (index < words.length) {
+                timerElement.innerText = words[index];
+            } else {
+                clearInterval(timer);
+                download();
+                modal.style.display = "none";
+            }
+        }, 1000);
+    }
+    const body = document.querySelector('body');
+    const footer = document.querySelector('footer');
+    const toogle = document.querySelector('.toogle');
+    toogle.onclick = () => {
+        body.classList.toggle('dark')
+        footer.classList.toggle('dark')
+    }
+</script>
 </body>
 </html>
