@@ -18,9 +18,6 @@
             padding: 0;
             background-color: #1a1a1a;
             color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
         marquee {
             font-size: 22px;
@@ -38,7 +35,6 @@
         }
         .set-container {
             padding: 15px;
-            flex: 1;
         }
         .containerbox {
             display: flex;
@@ -105,180 +101,162 @@
             color: #ffffff;
             padding: 20px 0;
             text-align: center;
-            width: 100%;
         }
         .updates-channel {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-        }
-        .updates-channel a {
-            display: inline-block;
-        }
-        .updates-channel img {
-            vertical-align: middle;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="set-container">
-        <div class="container">
-            <header>
-                <marquee bgcolor="#333333">
-                    <div class="toogle"></div>
-                    <div id="file-name">
-                        %s
-                    </div>
-                </marquee>
-            </header>
-            <tag src="%s" class="player"></tag>
-        </div>
-        <div class="containerbox">
-            <div class="dropdown">
-                <button class="dropbtn">Stream Options ▼</button>
-                <div class="dropdown-content">
-                    <a href="#" onclick="playOnline('vlc')">VLC Player</a>
-                    <a href="#" onclick="playOnline('mx')">MX Mobile</a>
-                    <a href="#" onclick="playOnline('sp')">SPlayer</a>
-                    <a href="#" onclick="playOnline('jplayer')">JPlayer</a>
-                    <a href="#" onclick="playOnline('allplayer')">AllPlayer</a>
-                    <a href="#" onclick="playOnline('kmplayer')">KMPlayer</a>
-                </div>
+<div class="set-container">
+    <div class="container">
+    <header>
+        <marquee bgcolor="#333333">
+            <div class="toogle"></div>
+            <div id="file-name">
+                %s
             </div>
-            <button id="dl-btn" onclick="download()">Download Video ☁️</button>
-            <button id="link-btn" onclick="copyLink()">Copy Link 🔗</button>
+        </marquee>
+    </header>
+        <tag src="%s" class="player"></tag>
+    </div>
+    <div class="containerbox">
+        <div class="dropdown">
+            <button class="dropbtn">Stream Options ▼</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="playOnline('vlc')">VLC Player</a>
+                <a href="#" onclick="playOnline('mx')">MX Mobile</a>
+                <a href="#" onclick="playOnline('sp')">SPlayer</a>
+                <a href="#" onclick="playOnline('jplayer')">JPlayer</a>
+                <a href="#" onclick="playOnline('allplayer')">AllPlayer</a>
+                <a href="#" onclick="playOnline('kmplayer')">KMPlayer</a>
+            </div>
         </div>
-    </div>  
+        <button id="dl-btn" onclick="download()">Download Video ☁️</button>
+        <button id="link-btn" onclick="copyLink()">Copy Link 🔗</button>
+    </div>
+</div>  
                  
-    <footer>
-        <div class="updates-channel">
-            <a href="https://telegram.me/TeamShoGuN" target="_blank">
-                <img src="https://img.shields.io/badge/Updates-Channel-blueviolet?style=for-the-badge" alt="Updates Channel">
-            </a>
-        </div>
-        <p>Join our channel for more updates ❤️</p>
-        <p>This website only provides a service that helps you to play your videos online without downloading.</p>
-    </footer>
+<footer>
+    <div class="updates-channel">
+        <a href="https://telegram.me/TeamShoGuN" target="_blank">
+            <img src="https://img.shields.io/badge/Updates-Channel-blueviolet?style=for-the-badge" alt="Updates Channel">
+        </a>
+    </div>
+    <p>Join our channel for more updates ❤️</p>
+    <p>This website only provides a service that helps you to play your videos online without downloading.</p>
+</footer>
 
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-    <script>
-        const controls = [
-            'play-large', 'rewind', 'play', 'fast-forward', 'progress',
-            'current-time', 'duration', 'captions', 'settings', 'fullscreen'
-        ];
-        const currentUrl = window.location.href;
-        const finalUrl = currentUrl.replace("/watch/", "/dl/");
-
-        function playOnline(player) {
-            switch(player) {
-                case 'vlc':
-                    window.location.href = `vlc://${finalUrl}`;
-                    break;
-                case 'mx':
-                    window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
-                    break;
-                case 'sp':
-                    window.location.href = `intent:${finalUrl}#Intent;action=com.young.simple.player.playback_online;package=com.young.simple.player;end`;
-                    break;
-                case 'jplayer':
-                    // Add JPlayer URL scheme here
-                    break;
-                case 'allplayer':
-                    // Add AllPlayer URL scheme here
-                    break;
-                case 'kmplayer':
-                    // Add KMPlayer URL scheme here
-                    break;
-            }
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script>
+    const controls = [
+        'play-large', 'rewind', 'play', 'fast-forward', 'progress',
+        'current-time', 'duration', 'captions', 'settings', 'fullscreen'
+    ];
+    const currentUrl = window.location.href;
+    const finalUrl = currentUrl.replace("/watch/", "/dl/");
+    function playOnline(player) {
+        switch(player) {
+            case 'vlc':
+                window.location.href = `vlc://${finalUrl}`;
+                break;
+            case 'mx':
+                window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
+                break;
+            case 'sp':
+                window.location.href = `intent:${finalUrl}#Intent;action=com.young.simple.player.playback_online;package=com.young.simple.player;end`;
+                break;
+            case 'jplayer':
+                // Add JPlayer URL scheme here
+                break;
+            case 'allplayer':
+                // Add AllPlayer URL scheme here
+                break;
+            case 'kmplayer':
+                // Add KMPlayer URL scheme here
+                break;
         }
-
-        function download() {
-            window.location.href = finalUrl;
-        }
-
-        function copyLink() {
-            navigator.clipboard.writeText(finalUrl).then(function() {
-                alert("Link copied to clipboard!");
-            }, function(err) {
-                console.error('Could not copy text: ', err);
-            });
-        }
-
-        function openTgBot() {
-            const createLinkUrl = "https://telegram.dog/";
-            window.open(createLinkUrl, "_blank");
-        }
-
-        function openModalTG() {
-            const modal = document.getElementById("myModal");
-            modal.style.display = "block";
-            const words = [
-                "Received File request...✅",
-                "Processing your request...⌛",
-                "Generating your link...🔗",
-                "Sending link to you...🚀",
-                "Redirecting To Telegram...😉"
-            ];
-            let index = 0;
-            const timerElement = document.getElementById("timer");
-            timerElement.innerText = words[index];
-            const timer = setInterval(() => {
-                index++;
-                if (index < words.length) {
-                    timerElement.innerText = words[index];
-                } else {
-                    clearInterval(timer);
-                    TGre();
-                    modal.style.display = "none";
-                }
-            }, 1000);
-        }
-
-        function TGre() {
-            const tglink = "";
-            window.location.href = tglink;
-        }
-
-        function openModal() {
-            const modal = document.getElementById("myModal");
-            modal.style.display = "block";
-            const words = [
-                "Received Download request...✅",
-                "Processing your request...⌛",
-                "Generating your link...🔗",
-                "Sending link to you...🚀",
-                "Download has started...😉"
-            ];
-            let index = 0;
-            const timerElement = document.getElementById("timer");
-            timerElement.innerText = words[index];
-            const timer = setInterval(() => {
-                index++;
-                if (index < words.length) {
-                    timerElement.innerText = words[index];
-                } else {
-                    clearInterval(timer);
-                    download();
-                    modal.style.display = "none";
-                }
-            }, 1000);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = Plyr.setup('.player', { 
-                controls,
-                captions: { active: true, update: true },
-                settings: ['captions', 'quality', 'speed', 'loop']
-            });
+    }
+    function download() {
+        window.location.href = finalUrl;
+    }
+    function copyLink() {
+        navigator.clipboard.writeText(finalUrl).then(function() {
+            alert("Link copied to clipboard!");
+        }, function(err) {
+            console.error('Could not copy text: ', err);
         });
-
-        const body = document.querySelector('body');
-        const footer = document.querySelector('footer');
-        const toogle = document.querySelector('.toogle');
-        toogle.onclick = () => {
-            body.classList.toggle('dark')
-            footer.classList.toggle('dark')
-        }
-    </script>
+    }
+    function openTgBot() {
+        const createLinkUrl = "https://telegram.dog/";
+        window.open(createLinkUrl, "_blank");
+    }
+    function openModalTG() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "block";
+        const words = [
+            "Received File request...✅",
+            "Processing your request...⌛",
+            "Generating your link...🔗",
+            "Sending link to you...🚀",
+            "Redirecting To Telegram...😉"
+        ];
+        let index = 0;
+        const timerElement = document.getElementById("timer");
+        timerElement.innerText = words[index];
+        const timer = setInterval(() => {
+            index++;
+            if (index < words.length) {
+                timerElement.innerText = words[index];
+            } else {
+                clearInterval(timer);
+                TGre();
+                modal.style.display = "none";
+            }
+        }, 1000);
+    }
+    function TGre() {
+        const tglink = "";
+        window.location.href = tglink;
+    }
+    function openModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "block";
+        const words = [
+            "Received Download request...✅",
+            "Processing your request...⌛",
+            "Generating your link...🔗",
+            "Sending link to you...🚀",
+            "Download has started...😉"
+        ];
+        let index = 0;
+        const timerElement = document.getElementById("timer");
+        timerElement.innerText = words[index];
+        const timer = setInterval(() => {
+            index++;
+            if (index < words.length) {
+                timerElement.innerText = words[index];
+            } else {
+                clearInterval(timer);
+                download();
+                modal.style.display = "none";
+            }
+        }, 1000);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = Plyr.setup('.player', { 
+            controls,
+            captions: { active: true, update: true },
+            settings: ['captions', 'quality', 'speed', 'loop']
+        });
+    });
+    const body = document.querySelector('body');
+    const footer = document.querySelector('footer');
+    const toogle = document.querySelector('.toogle');
+    toogle.onclick = () => {
+        body.classList.toggle('dark')
+        footer.classList.toggle('dark')
+    }
+</script>
 </body>
 </html>
