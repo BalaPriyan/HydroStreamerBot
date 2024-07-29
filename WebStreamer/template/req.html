@@ -1,259 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta property="og:image" content="https://i.ibb.co/M8S0Zzj/live-streaming.png" itemprop="thumbnailUrl">
+    <meta property="og:image" content="https://i.ibb.co/M8S0Zzj/live-streaming.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>%s</title>
-    
     <link rel="icon" href="https://raw.githubusercontent.com/TahirDea/Resources/main/ICON.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Delius">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: sans-serif;
-            font-size: 16px;
-            margin: 0;
-            padding: 0;
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-        marquee {
-            font-size: 22px;
-            color: #ffffff;
-            font-family: serif;
-        }
-        #player-container {
-            margin: 1px;
-        }
-        .container {
-            overflow: hidden;
-            *zoom: 1;
-            margin: 0 1px;
-            margin-bottom: 20px;
-        }
-        .set-container {
-            padding: 15px;
-        }
-        .containerbox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            background-color: #1a1a1a;
-            padding: 20px 0;
-        }
-        .mainupdates {
-            overflow: hidden;
-            *zoom: 1;
-            margin-bottom: 60px;
-        }
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropbtn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .dropdown-content a:hover {background-color: #f1f1f1}
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown:hover .dropbtn {
-            background-color: #0056b3;
-        }
-        #dl-btn, #link-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        #dl-btn:hover, #link-btn:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            background-color: #2a2a2a;
-            color: #ffffff;
-            padding: 20px 0;
-            text-align: center;
-        }
-        .updates-channel {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fyaz05/Resources@main/style.css">
 </head>
+
 <body>
-<div class="set-container">
     <div class="container">
-    <header>
-        <marquee bgcolor="#333333">
-            <div class="toogle"></div>
-            <div id="file-name">
-                %s
-            </div>
-        </marquee>
-    </header>
-        <tag src="%s" class="player"></tag>
-     </div>
-    <div class="containerbox">
-        <div class="dropdown">
-            <button class="dropbtn">Stream ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="playOnline('vlc')">VLC Mobile</a>
-                <a href="#" onclick="playOnline('mxp')">MX Player Pro</a>
-                <a href="#" onclick="playOnline('mx')">MX Player</a>
-                <a href="#" onclick="playOnline('np')">nPlayer</a>
+        <header>
+            <h1 id="file-name">%s</h1>
+        </header>
+        <div class="player-container">
+            <div class="video-wrapper">
+                <video class="plyr" controls poster="https://raw.githubusercontent.com/TahirDea/Resources/main/videobg.jpeg">
+                    <source src="%s" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </div>
-        <button id="dl-btn" onclick="download()">Download Video ☁️</button>
-        <button id="link-btn" onclick="copyLink()">Copy Link 🔗</button>
+        <div class="controls">
+            <div class="dropdown">
+                <button class="btn"><i class="fas fa-play"></i> Stream</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="playOnline('vlc')">
+                        <img src="https://play-lh.googleusercontent.com/nPnJc260PPoupBe-DcVQ-MNr6149dphdEoEAN-C9xwgctpVXbwsuyon_jEZ3uPWWYQ=w480-h960-rw" alt="VLC" class="player-logo"> VLC
+                    </a>
+                    <a href="#" onclick="playOnline('mxp')">
+                        <img src="https://play-lh.googleusercontent.com/2VgqYMAFw4aJvCab7sViUhWgqCkAX6Dn9uftmSM2LIgxHN9EqLOMjJFmnklvXvHBPfA=s96-rw" alt="MX Player Pro" class="player-logo"> MX Player Pro
+                    </a>
+                    <a href="#" onclick="playOnline('mx')">
+                        <img src="https://play-lh.googleusercontent.com/q7dPSMz8uUF4r6MIJN6CpJN8XgnVeeb_wHvjFvwcMfs6hgkK9cOlRqsb2JuZP9Ynjg=s96-rw" alt="MX Player" class="player-logo"> MX Player
+                    </a>
+                    <a href="#" onclick="playOnline('np')">
+                        <img src="https://play-lh.googleusercontent.com/sUfT6XnffHLlw6UcJ4UMwfAohc63xYGqdU1nEOcmQuvRg0qXZVZswFO4I7eT1zN_UigD=w480-h960-rw" alt="nPlayer" class="player-logo"> nPlayer
+                    </a>
+                </div>
+            </div>
+            <button class="btn" onclick="download()"><i class="fas fa-cloud-download-alt"></i> Download</button>
+            <button class="btn" onclick="copyLink()"><i class="fas fa-link"></i> Copy Link</button>
+            <p style="color: var(--primary-color); margin-top: 20px;">If the video isn’t playing, it might not be supported in the browser. Try in a video player.</p>
+        </div>
     </div>
-</div>  
-                 
-<footer>
-    <div class="updates-channel">
-        <!-- Modify Below link -->
-        <a href="https://telegram.me/BalaPriyan" target="_blank">
-            <img src="https://img.shields.io/badge/Updates-Channel-blueviolet?style=for-the-badge" alt="Updates Channel">
-        </a>
-    </div>
-    <p>Join our channel for more updates ❤️</p>
-    <p>This website only provides a service that helps you to play your videos online without downloading.</p>
-</footer>
+    <footer>
+        <div class="updates-channel">
+             <!-- #Replace the link below with your channel link. -->
+            <a href="https://telegram.me/BalaPriyan" target="_blank">
+                <img src="https://img.shields.io/badge/Updates-Channel-blueviolet?style=for-the-badge" alt="Updates Channel">
+            </a>
+        </div>
+        <p>Join our channel for more updates ❤️</p>
+        <p>Copyright &copy; 2024 HydroStreamerBot. All Rights Reserved.</p>
+    </footer>
 
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const player = new Plyr('.player', {
-            controls: [
-                'play-large', 'restart', 'rewind', 'play', 'fast-forward', 'progress', 'current-time',
-                'duration', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'
-            ],
-            settings: ['captions', 'quality', 'speed', 'loop'],
-            tooltips: { controls: true, seek: true },
-            keyboard: { focused: true, global: true },
-            captions: { active: true, language: 'auto', update: true },
-            quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240] }
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoElement = document.querySelector('.plyr');
+            const player = new Plyr(videoElement);
         });
-    });
-    const currentUrl = window.location.href;
-    const finalUrl = currentUrl.replace("/watch/", "/dl/");
-    function playOnline(player) {
-        switch(player) {
-            case 'vlc':
-                window.location.href = `vlc://${finalUrl}`;
-                break;
-            case 'mx':
-                window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
-                break;
-            case 'mxp':
-                window.location.href = `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.pro;end`;
-                break;
-            case 'np':
-                window.location.href = `intent:${finalUrl}#Intent;package=com.newin.nplayer.pro;end`;
-                break;
+
+        const currentUrl = window.location.href;
+        const finalUrl = currentUrl.replace("/watch/", "/dl/");
+
+        function playOnline(player) {
+            const playerUrls = {
+                'vlc': `vlc://${finalUrl}`,
+                'mxp': `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.pro;end`,
+                'mx': `intent:${finalUrl}#Intent;package=com.mxtech.videoplayer.ad;end`,
+                'np': `nplayer-${finalUrl}`
+            };
+            window.location.href = playerUrls[player] || finalUrl;
         }
-    }
-    function download() {
-        window.location.href = finalUrl;
-    }
-    function copyLink() {
-        navigator.clipboard.writeText(finalUrl).then(function() {
-            alert("Link copied to clipboard!");
-        }, function(err) {
-            console.error('Could not copy text: ', err);
-        });
-    }
-    function openTgBot() {
-        const createLinkUrl = "https://telegram.dog/";
-        window.open(createLinkUrl, "_blank");
-    }
-    function openModalTG() {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "block";
-        const words = [
-            "Received File request...✅",
-            "Processing your request...⌛",
-            "Generating your link...🔗",
-            "Sending link to you...🚀",
-            "Redirecting To Telegram...😉"
-        ];
-        let index = 0;
-        const timerElement = document.getElementById("timer");
-        timerElement.innerText = words[index];
-        const timer = setInterval(() => {
-            index++;
-            if (index < words.length) {
-                timerElement.innerText = words[index];
-            } else {
-                clearInterval(timer);
-                TGre();
-                modal.style.display = "none";
-            }
-        }, 1000);
-    }
-    function TGre() {
-        const tglink = "";
-        window.location.href = tglink;
-    }
-    function openModal() {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "block";
-        const words = [
-            "Received Download request...✅",
-            "Processing your request...⌛",
-            "Generating your link...🔗",
-            "Sending link to you...🚀",
-            "Download has started...😉"
-        ];
-        let index = 0;
-        const timerElement = document.getElementById("timer");
-        timerElement.innerText = words[index];
-        const timer = setInterval(() => {
-            index++;
-            if (index < words.length) {
-                timerElement.innerText = words[index];
-            } else {
-                clearInterval(timer);
-                download();
-                modal.style.display = "none";
-            }
-        }, 1000);
-    }
-    const body = document.querySelector('body');
-    const footer = document.querySelector('footer');
-    const toogle = document.querySelector('.toogle');
-    toogle.onclick = () => {
-        body.classList.toggle('dark')
-        footer.classList.toggle('dark')
-    }
-</script>
+
+        function download() {
+            window.location.href = finalUrl;
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(finalUrl)
+                .then(() => alert("Link copied to clipboard!"))
+                .catch(err => console.error('Could not copy text: ', err));
+        }
+    </script>
 </body>
+
 </html>
