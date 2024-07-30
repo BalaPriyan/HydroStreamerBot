@@ -1,6 +1,3 @@
-# Taken from megadlbot_oss <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/webserver/routes.py>
-# Thanks to Eyaadh <https://github.com/eyaadh>
-
 import time
 import math
 import logging
@@ -14,29 +11,27 @@ from WebStreamer.server.exceptions import FIleNotFound, InvalidHash
 from WebStreamer import utils, StartTime, __version__
 from WebStreamer.utils.render_template import render_page
 
-
 routes = web.RouteTableDef()
 
-@routes.get("/status", allow_head=True)
+@routes.get("/stats", allow_head=True)
 async def root_route_handler(_):
-    return web.json_response(
-        {
-            "server_status": "running",
-            "uptime": utils.get_readable_time(time.time() - StartTime),
-            "telegram_bot": "@" + StreamBot.username,
-            "connected_bots": len(multi_clients),
-            "loads": dict(
-                ("bot" + str(c + 1), l)
-                for c, (_, l) in enumerate(
-                    sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
-                )
-            ),
-            "version": __version__,
-        }
-    )
+    """Handler for status endpoint."""
+    return web.json_response({
+        "server_status": "running",
+        "uptime": utils.get_readable_time(time.time() - StartTime),
+        "telegram_bot": "@" + StreamBot.username,
+        "connected_bots": len(multi_clients),
+        "loads": {
+            f"bot{c+1}": l for c, (_, l) in enumerate(
+                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
+            )
+        },
+        "version": __version__,
+    })
 
 @routes.get("/watch/{path}", allow_head=True)
-async def stream_handler(request: web.Request):
+async def watch_handler(request: web.Request):
+    """Handler for watch endpoint."""
     try:
         path = request.match_info["path"]
         return web.Response(text=await render_page(path), content_type='text/html')
@@ -47,12 +42,13 @@ async def stream_handler(request: web.Request):
     except (AttributeError, BadStatusLine, ConnectionResetError):
         pass
     except Exception as e:
-        logging.critical(e.with_traceback(None))
+        logging.critical(e)
         logging.debug(traceback.format_exc())
         raise web.HTTPInternalServerError(text=str(e))
 
 @routes.get("/dl/{path}", allow_head=True)
-async def stream_handler(request: web.Request):
+async def download_handler(request: web.Request):
+    """Handler for download endpoint."""
     try:
         path = request.match_info["path"]
         return await media_streamer(request, path)
@@ -63,43 +59,55 @@ async def stream_handler(request: web.Request):
     except (AttributeError, BadStatusLine, ConnectionResetError):
         pass
     except Exception as e:
-        logging.critical(e.with_traceback(None))
+        logging.critical(e)
+        logging.debug(traceback.format_exc())
+        raise web.HTTPInternalServerError(text=str(e))
+
+@routes.get("/stream/{path}", allow_head=True)
+async def stream_handler(request: web.Request):
+    """Handler for stream endpoint."""
+    try:
+        path = request.match_info["path"]
+        return await media_streamer(request, path)
+    except InvalidHash as e:
+        raise web.HTTPForbidden(text=e.message)
+    except FIleNotFound as e:
+        raise web.HTTPNotFound(text=e.message)
+    except (AttributeError, BadStatusLine, ConnectionResetError):
+        pass
+    except Exception as e:
+        logging.critical(e)
         logging.debug(traceback.format_exc())
         raise web.HTTPInternalServerError(text=str(e))
 
 class_cache = {}
 
 async def media_streamer(request: web.Request, db_id: str):
-    range_header = request.headers.get("Range", 0)
-    
-    index = min(work_loads, key=work_loads.get)
-    faster_client = multi_clients[index]
-    
-    if Var.MULTI_CLIENT:
-        logging.info(f"Client {index} is now serving {request.headers.get('X-FORWARDED-FOR',request.remote)}")
+    """Stream media file."""
 
-    if faster_client in class_cache:
-        tg_connect = class_cache[faster_client]
-        logging.debug(f"Using cached ByteStreamer object for client {index}")
+    range_header = request.headers.get("Range")
+    client_index = min(work_loads, key=work_loads.get)
+    fastest_client = multi_clients[client_index]
+
+    if Var.MULTI_CLIENT:
+        logging.info(f"Client {client_index} is now serving {request.headers.get('X-FORWARDED-FOR', request.remote)}")
+
+    if fastest_client in class_cache:
+        tg_connect = class_cache[fastest_client]
+        logging.debug(f"Using cached ByteStreamer object for client {client_index}")
     else:
-        logging.debug(f"Creating new ByteStreamer object for client {index}")
-        tg_connect = utils.ByteStreamer(faster_client)
-        class_cache[faster_client] = tg_connect
+        logging.debug(f"Creating new ByteStreamer object for client {client_index}")
+        tg_connect = utils.ByteStreamer(fastest_client)
+        class_cache[fastest_client] = tg_connect
+
     logging.debug("before calling get_file_properties")
     file_id = await tg_connect.get_file_properties(db_id, multi_clients)
     logging.debug("after calling get_file_properties")
-    
+
     file_size = file_id.file_size
+    from_bytes, until_bytes = parse_range_header(range_header, file_size)
 
-    if range_header:
-        from_bytes, until_bytes = range_header.replace("bytes=", "").split("-")
-        from_bytes = int(from_bytes)
-        until_bytes = int(until_bytes) if until_bytes else file_size - 1
-    else:
-        from_bytes = request.http_range.start or 0
-        until_bytes = (request.http_range.stop or file_size) - 1
-
-    if (until_bytes > file_size) or (from_bytes < 0) or (until_bytes < from_bytes):
+    if (until_bytes >= file_size) or (from_bytes < 0) or (until_bytes < from_bytes):
         return web.Response(
             status=416,
             body="416: Range not satisfiable",
@@ -108,35 +116,36 @@ async def media_streamer(request: web.Request, db_id: str):
 
     chunk_size = 1024 * 1024
     until_bytes = min(until_bytes, file_size - 1)
-
     offset = from_bytes - (from_bytes % chunk_size)
     first_part_cut = from_bytes - offset
     last_part_cut = until_bytes % chunk_size + 1
-
     req_length = until_bytes - from_bytes + 1
-    part_count = math.ceil(until_bytes / chunk_size) - math.floor(offset / chunk_size)
-    body = tg_connect.yield_file(
-        file_id, index, offset, first_part_cut, last_part_cut, part_count, chunk_size
-    )
+    part_count = math.ceil((until_bytes + 1) / chunk_size) - math.floor(offset / chunk_size)
+    
+    body = tg_connect.yield_file(file_id, client_index, offset, first_part_cut, last_part_cut, part_count, chunk_size)
 
-    mime_type = file_id.mime_type
-    file_name = utils.get_name(file_id)
-    disposition = "attachment"
-
-    if not mime_type:
-        mime_type = mimetypes.guess_type(file_name)[0] or "application/octet-stream"
-
-    # if "video/" in mime_type or "audio/" in mime_type:
-    #     disposition = "inline"
+    mime_type = file_id.mime_type or mimetypes.guess_type(utils.get_name(file_id))[0] or "application/octet-stream"
+    disposition = "attachment" if "application/" in mime_type or "text/" in mime_type else "inline"
 
     return web.Response(
         status=206 if range_header else 200,
         body=body,
         headers={
-            "Content-Type": f"{mime_type}",
+            "Content-Type": mime_type,
             "Content-Range": f"bytes {from_bytes}-{until_bytes}/{file_size}",
             "Content-Length": str(req_length),
-            "Content-Disposition": f'{disposition}; filename="{file_name}"',
+            "Content-Disposition": f'{disposition}; filename="{utils.get_name(file_id)}"',
             "Accept-Ranges": "bytes",
         },
     )
+
+def parse_range_header(header, file_size):
+    """Parse Range header and return tuple of (from_bytes, until_bytes)."""
+    from_bytes, until_bytes = 0, file_size - 1
+    if header:
+        range_parts = header.replace("bytes=", "").split("-")
+        if range_parts[0]:
+            from_bytes = int(range_parts[0])
+        if range_parts[1]:
+            until_bytes = int(range_parts[1]) if range_parts[1] else file_size - 1
+    return from_bytes, until_bytes
