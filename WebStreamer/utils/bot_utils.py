@@ -1,4 +1,5 @@
-# This file is a part of FileStreamBot
+# Code optimized by fyaz05
+# Code from SpringsFern
 
 from __future__ import annotations
 from hydrogram.errors import UserNotParticipant
@@ -13,7 +14,7 @@ from WebStreamer.vars import Var
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-async def is_user_joined(message:Message,lang) -> bool:
+async def is_user_joined(message: Message, lang) -> bool:
     try:
         user = await message._client.get_chat_member(Var.UPDATES_CHANNEL, message.chat.id)
         if user.status == "BANNED":
@@ -27,9 +28,7 @@ async def is_user_joined(message:Message,lang) -> bool:
         await message.reply_text(
             text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
             reply_markup=InlineKeyboardMarkup(
-                [[
-                    InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
-                    ]]
+                [[InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")]]
             ),
             parse_mode=ParseMode.HTML
         )
@@ -38,26 +37,24 @@ async def is_user_joined(message:Message,lang) -> bool:
         await message.reply_text(
             text=f"<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='https://t.me/{Var.UPDATES_CHANNEL}'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
             parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True)
+            disable_web_page_preview=True
+        )
         return False
     return True
 
-# Generate Text, Stream Link, reply_markup
 async def gen_link(m: Message, _id, name: list) -> tuple[InlineKeyboardMarkup, str]:
     """Generate Text for Stream Link, Reply Text and reply_markup"""
     lang = Language(m)
     file_name = get_name(m)
     file_size = humanbytes(get_media_file_size(m))
     page_link = f"{Var.URL}watch/{_id}"
-    
     stream_link = f"{Var.URL}dl/{_id}"
-    Stream_Text=lang.STREAM_MSG_TEXT.format(file_name, file_size, stream_link, page_link, name[0], name[1])
-    reply_markup=InlineKeyboardMarkup(
+    Stream_Text = lang.STREAM_MSG_TEXT.format(file_name, file_size, stream_link, page_link, name[0], name[1])
+    reply_markup = InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]
-            ]
-        )
-
+            [InlineKeyboardButton("📺STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ⬇️", url=stream_link)]
+        ]
+    )
     return reply_markup, Stream_Text
 
 async def is_user_banned(message, lang) -> bool:
@@ -71,7 +68,7 @@ async def is_user_banned(message, lang) -> bool:
     return False
 
 async def is_user_exist(message: Message):
-    if not bool(await db.get_user(message.from_user.id)):
+    if not await db.get_user(message.from_user.id):
         await db.add_user(message.from_user.id)
         await message._client.send_message(
             Var.BIN_CHANNEL,
@@ -79,42 +76,45 @@ async def is_user_exist(message: Message):
         )
 
 async def is_user_accepted_tos(message: Message) -> bool:
-    user=await db.get_user(message.from_user.id)
-    if not ("agreed_to_tos" in user) or not (user["agreed_to_tos"]):
+    user = await db.get_user(message.from_user.id)
+    if not user.get("agreed_to_tos"):
         await message.reply(f"Hi {message.from_user.mention},\nplease read and accept the Terms of Service to continue using the bot")
         await message.reply_text(
             Var.TOS,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("I accept the TOS", callback_data=f"accepttos_{message.from_user.id}")]])
-            )
+        )
         return False
     return True
 
-async def is_allowed(message: Message):
-    if Var.ALLOWED_USERS and not ((str(message.from_user.id) in Var.ALLOWED_USERS) or (message.from_user.username in Var.ALLOWED_USERS)):
-        await message.reply("You are not in the allowed list of users who can use me.", quote=True)
-        return False
+async def is_allowed(message: Message) -> bool:
+    if Var.ALLOWED_USERS:
+        user_id_str = str(message.from_user.id)
+        if user_id_str not in Var.ALLOWED_USERS and message.from_user.username not in Var.ALLOWED_USERS:
+            await message.reply("You are not in the allowed list of users who can use me.", quote=True)
+            return False
     return True
 
 async def validate_user(message: Message, lang=None) -> bool:
     if not await is_allowed(message):
         return False
-    await is_user_exist(message)
-    if Var.TOS:
-        if not await is_user_accepted_tos(message):
-            return False
 
-    if not lang:
-        lang = Language(message)
+    await is_user_exist(message)
+
+    if Var.TOS and not await is_user_accepted_tos(message):
+        return False
+
+    lang = lang or Language(message)
+
     if await is_user_banned(message, lang):
         return False
-    if Var.FORCE_UPDATES_CHANNEL:
-        if not await is_user_joined(message,lang):
-            return False
+
+    if Var.FORCE_UPDATES_CHANNEL and not await is_user_joined(message, lang):
+        return False
+
     return True
 
 def file_format(file_id: str | FileId) -> str:
-    if isinstance(file_id, str):
-        file_id=FileId.decode(file_id)
+    file_id = FileId.decode(file_id) if isinstance(file_id, str) else file_id
     if file_id.file_type in PHOTO_TYPES:
         return "Photo"
     elif file_id.file_type == FileType.VOICE:
