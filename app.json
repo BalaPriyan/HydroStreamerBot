@@ -98,7 +98,7 @@
     "formation": {
         "web": {
             "quantity": 1,
-            "size": "Standard"
+            "size": "basic"
         }
     }
   }
