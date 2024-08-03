@@ -99,7 +99,7 @@ who - (Admin) Check sender of a file
 
 Press the button below to deploy on Heroku:
 
-[![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/BalaPriyan/HydroStreamerBot)
 
 Then go to the [variables tab](#mandatory-vars) for more info on setting up environmental variables.
 

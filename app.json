@@ -1,10 +1,10 @@
 {
-    "name": "Hyro Streamer Bot",
-    "description": "A Hydogram Telegram bot to access Telegram Files via the web.",
+    "name": "Hydro Streamer Bot",
+    "description": "A Hydrogram Telegram bot to access Telegram Files via the web.",
     "keywords": [
         "telegram",
         "web",
-        "Hyrogram",
+        "hydrogram",
         "aiohttp",
         "python",
         "plugin",
@@ -75,7 +75,7 @@
             "required": false
         },
         "SESSION_NAME": {
-            "description": "Mongodb Database Name Default to F2LxBot",
+            "description": "Mongodb Database Name Default to HydroStreamerBot",
             "required": false
         },
         "KEEP_ALIVE" : {
@@ -98,7 +98,7 @@
     "formation": {
         "web": {
             "quantity": 1,
-            "size": "Basic"
+            "size": "Standard"
         }
     }
   }
