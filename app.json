@@ -1,16 +1,7 @@
 {
     "name": "Hydro Streamer Bot",
     "description": "A Hydrogram Telegram bot to access Telegram Files via the web.",
-    "keywords": [
-        "telegram",
-        "web",
-        "hydrogram",
-        "aiohttp",
-        "python",
-        "plugin",
-        "modular",
-        "media"
-      ],
+    "keywords": ["telegram", "web", "hydrogram", "aiohttp", "python", "plugin", "modular", "media" ],
     "repository": "https://github.com/BalaPriyan/HydroStreamerBot",
     "success_url": "/",
     "website": "https://github.com/BalaPriyan/HydroStreamerBot",
@@ -91,14 +82,14 @@
             "description": "Limit Number of Links a User Can Generate. Value should be a Number",
             "required": false
         }
-    },
-    "buildpacks": [{
-        "url": "heroku/python"
-      }],
-    "formation": {
-        "web": {
-            "quantity": 1,
-            "size": "basic"
-        }
-    }
+  },
+  "buildpacks": [{
+      "url": "heroku/python"
+    }],
+  "formation": {
+      "web": {
+          "quantity": 1,
+          "size": "free"
+      }
   }
+}
