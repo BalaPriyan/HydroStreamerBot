@@ -4,7 +4,7 @@ import asyncio
 import logging
 from os import environ
 from ..vars import Var
-from hydrogram import Client
+from swibots import Client
 from . import multi_clients, work_loads, StreamBot
 
 
@@ -38,8 +38,6 @@ async def initialize_clients():
                 print("This will take some time, please wait...")
             client = await Client(
                 name=str(client_id),
-                api_id=Var.API_ID,
-                api_hash=Var.API_HASH,
                 bot_token=bot_token,
                 sleep_threshold=Var.SLEEP_THRESHOLD,
                 no_updates=True,
