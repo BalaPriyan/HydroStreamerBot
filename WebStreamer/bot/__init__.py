@@ -2,7 +2,7 @@
 
 
 from ..vars import Var
-from hydrogram import Client
+from swibots import Client
 
 if Var.SECONDARY:
     plugins=None
@@ -13,8 +13,6 @@ else:
 
 StreamBot = Client(
     name="WebStreamer",
-    api_id=Var.API_ID,
-    api_hash=Var.API_HASH,
     workdir="WebStreamer",
     plugins=plugins,
     bot_token=Var.BOT_TOKEN,
