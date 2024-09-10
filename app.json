@@ -90,6 +90,26 @@
         "LINK_LIMIT": {
             "description": "Limit Number of Links a User Can Generate. Value should be a Number",
             "required": false
+        },
+        "VERIFY_TUTORIAL": {
+            "description": "Video Url To Know How To Bypass The Shortener",
+            "required": false
+        },
+        "BOT_USERNAME": {
+            "description": "Bot USername To Get Verfiy Token",
+            "required": false
+        },
+        "VERIFY": {
+            "description": "TO Add Verfiy The Token system True Or False",
+            "required": false
+        },
+        "SHORT_API": {
+            "description": "Shortener Site Api",
+            "required": false
+        },
+        "SHORT_URL": {
+            "description": "Shortener Site Url",
+            "required": false
         }
     },
     "buildpacks": [{

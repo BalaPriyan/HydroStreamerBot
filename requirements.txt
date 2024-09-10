@@ -6,3 +6,5 @@ motor
 aiofiles
 dnspython
 pymongo
+pytz
+shortzy
