@@ -4,7 +4,7 @@ import asyncio
 import logging
 import aiohttp
 import traceback
-from WebStreamer.vars import Var
+from HydroStreamer.vars import Var
 
 
 async def ping_server():
