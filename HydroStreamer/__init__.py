@@ -3,5 +3,5 @@
 
 import time
 
-__version__ = "2.5.0"
+__version__ = "3.0"
 StartTime = time.time()
