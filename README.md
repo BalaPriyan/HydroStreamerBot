@@ -12,9 +12,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/BalaPriyan/issues">🐞 Report a Bug</a>
+  <a href="https://github.com/BalaPriyan/HydroStreamerBot/issues">🐞 Report a Bug</a>
   |
-  <a href="https://github.com/BalaPriyan/issues">✨ Request a Feature</a>
+  <a href="https://github.com/BalaPriyan/HydroStreamerBot/issues">✨ Request a Feature</a>
 </p>
 
 <hr>
