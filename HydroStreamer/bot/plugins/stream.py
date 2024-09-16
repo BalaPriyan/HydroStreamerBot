@@ -4,7 +4,7 @@
 import asyncio
 from hydrogram import Client, filters
 from hydrogram.errors import FloodWait, UserIsBlocked, ChatWriteForbidden, ChatAdminRequired
-from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, ParseMode
+from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from hydrogram.enums.parse_mode import ParseMode
 
 from HydroStreamer.utils.Translation import Language
