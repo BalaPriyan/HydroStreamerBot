@@ -4,7 +4,7 @@ import pytz
 from datetime import datetime
 from HydroStreamer.vars import Var
 from shortzy import Shortzy
-from database import Database  # Import your Database class
+from HydroStreamer.utils.database import Database  # Import your Database class
 
 # Initialize the database
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
