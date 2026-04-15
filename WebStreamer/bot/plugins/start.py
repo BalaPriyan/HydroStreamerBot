@@ -1,4 +1,4 @@
-# Code optimized by fyaz05
+# Code optimized by fyaz05 & BalaPriyan
 # Code from SpringsFern
 
 import math
@@ -7,13 +7,12 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.server.exceptions import FIleNotFound
 from WebStreamer.utils.bot_utils import is_user_accepted_tos, validate_user
 from WebStreamer.vars import Var
-from WebStreamer.utils.database import Database
+from WebStreamer.utils.database import db
 from WebStreamer.utils.Translation import Language, BUTTON
+
 from hydrogram import filters, Client
 from hydrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from hydrogram.enums.parse_mode import ParseMode
-
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 @StreamBot.on_message(filters.command('start') & filters.private)
 async def start(bot: Client, message: Message):

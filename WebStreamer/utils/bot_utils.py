@@ -1,18 +1,29 @@
-# Code optimized by fyaz05
+# Code optimized by fyaz05 & BalaPriyan
 # Code from SpringsFern
 
 from __future__ import annotations
+import time
+from collections import defaultdict
+
+_spam_check = defaultdict(lambda: 0.0)
+
+async def is_spamming(message) -> bool:
+    user_id = message.from_user.id
+    current_time = time.monotonic()
+    if current_time - _spam_check[user_id] < 1.0:
+        _spam_check[user_id] = current_time
+        return True
+    _spam_check[user_id] = current_time
+    return False
 from hydrogram.errors import UserNotParticipant
 from hydrogram.enums.parse_mode import ParseMode
 from hydrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from hydrogram.file_id import FileId, FileType, PHOTO_TYPES
 from WebStreamer.utils.Translation import Language
-from WebStreamer.utils.database import Database
+from WebStreamer.utils.database import db
 from WebStreamer.utils.file_properties import get_media_file_size, get_name
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.vars import Var
-
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 async def is_user_joined(message: Message, lang) -> bool:
     try:
@@ -95,6 +106,9 @@ async def is_allowed(message: Message) -> bool:
     return True
 
 async def validate_user(message: Message, lang=None) -> bool:
+    if await is_spamming(message):
+        return False
+
     if not await is_allowed(message):
         return False
 

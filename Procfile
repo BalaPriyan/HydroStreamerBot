@@ -1,1 +1,1 @@
-web: python -m WebStreamer
+web: gunicorn WebStreamer.server:web_server --bind 0.0.0.0:$PORT --worker-class aiohttp.GunicornWebWorker

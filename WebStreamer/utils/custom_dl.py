@@ -4,6 +4,8 @@ import asyncio
 import logging
 from typing import Dict, Union
 from WebStreamer.bot import work_loads
+from WebStreamer.utils.redis_broker import increment_workload, decrement_workload
+from WebStreamer.utils.database import db
 from hydrogram import Client, utils, raw
 from .file_properties import get_file_ids
 from hydrogram.session import Session, Auth
@@ -38,10 +40,29 @@ class ByteStreamer:
         if the properties are cached, then it'll return the cached results.
         or it'll generate the properties from the Message ID and cache them.
         """
-        if not db_id in self.cached_file_ids:
-            logging.debug("Before Calling generate_file_properties")
-            await self.generate_file_properties(db_id, multi_clients)
-            logging.debug(f"Cached file properties for file with ID {db_id}")
+        if db_id in self.cached_file_ids:
+            return self.cached_file_ids[db_id]
+
+        try:
+            file_info = await db.get_file(db_id)
+            if file_info and file_info.get("file_ids"):
+                file_id_str = file_info["file_ids"].get("file_id_str")
+                if file_id_str:
+                    file_id = FileId.decode(file_id_str)
+                    self.cached_file_ids[db_id] = file_id
+                    return file_id
+        except Exception as e:
+            logging.error(f"Error fetching cache from DB: {e}")
+
+        logging.debug("Before Calling generate_file_properties")
+        file_id = await self.generate_file_properties(db_id, multi_clients)
+        
+        try:
+            await db.update_file_ids(db_id, {"file_id_str": file_id.encode()})
+        except Exception as e:
+            logging.error(f"Error saving cache to DB: {e}")
+            
+        logging.debug(f"Cached file properties for file with ID {db_id}")
         return self.cached_file_ids[db_id]
     
     async def generate_file_properties(self, db_id: str, multi_clients) -> FileId:
@@ -174,7 +195,7 @@ class ByteStreamer:
         Thanks to Eyaadh <https://github.com/eyaadh>
         """
         client = self.client
-        work_loads[index] += 1
+        await increment_workload(index)
         logging.debug(f"Starting to yielding file with client {index}.")
         media_session = await self.generate_media_session(client, file_id)
 
@@ -183,41 +204,49 @@ class ByteStreamer:
         location = await self.get_location(file_id)
 
         try:
-            r = await media_session.invoke(
+            task = asyncio.create_task(media_session.invoke(
                 raw.functions.upload.GetFile(
                     location=location, offset=offset, limit=chunk_size
-                ),
-            )
-            if isinstance(r, raw.types.upload.File):
-                while True:
-                    chunk = r.bytes
-                    if not chunk:
-                        break
-                    elif part_count == 1:
-                        yield chunk[first_part_cut:last_part_cut]
-                    elif current_part == 1:
-                        yield chunk[first_part_cut:]
-                    elif current_part == part_count:
-                        yield chunk[:last_part_cut]
-                    else:
-                        yield chunk
+                )
+            ))
 
-                    current_part += 1
-                    offset += chunk_size
+            while True:
+                r = await task
+                if not isinstance(r, raw.types.upload.File):
+                    break
 
-                    if current_part > part_count:
-                        break
+                chunk = r.bytes
+                if not chunk:
+                    break
+                
+                offset += chunk_size
 
-                    r = await media_session.invoke(
+                if current_part < part_count:
+                    task = asyncio.create_task(media_session.invoke(
                         raw.functions.upload.GetFile(
                             location=location, offset=offset, limit=chunk_size
-                        ),
-                    )
+                        )
+                    ))
+
+                if part_count == 1:
+                    yield chunk[first_part_cut:last_part_cut]
+                elif current_part == 1:
+                    yield chunk[first_part_cut:]
+                elif current_part == part_count:
+                    yield chunk[:last_part_cut]
+                else:
+                    yield chunk
+
+                current_part += 1
+
+                if current_part > part_count:
+                    break
+
         except (TimeoutError, AttributeError):
             pass
         finally:
             logging.debug(f"Finished yielding file with {current_part} parts.")
-            work_loads[index] -= 1
+            await decrement_workload(index)
 
     
     async def clean_cache(self) -> None:

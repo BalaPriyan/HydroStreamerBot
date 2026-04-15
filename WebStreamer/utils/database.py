@@ -1,4 +1,4 @@
-# Code optimized by fyaz05
+# Code optimized by fyaz05 & BalaPriyan
 # Code from SpringsFern
 
 import pymongo
@@ -16,7 +16,27 @@ class Database:
         self.col = self.db.users
         self.black = self.db.blacklist
         self.file = self.db.file
-   
+
+    async def poll_config(self):
+        import asyncio
+        while True:
+            try:
+                config = await self.db.config.find_one({"_id": "hydrostreamer_config"})
+                if config:
+                    from WebStreamer.vars import Var
+                    config.pop("_id", None)
+                    Var._live_config.update(config)
+            except Exception as e:
+                pass
+            await asyncio.sleep(60)
+
+    async def setup(self):
+        import asyncio
+        await self.col.create_index([("id", pymongo.ASCENDING)], unique=True)
+        await self.file.create_index([("user_id", pymongo.ASCENDING)])
+        await self.file.create_index([("file_unique_id", pymongo.ASCENDING)])
+        asyncio.create_task(self.poll_config())
+
     def new_user(self, id):
         return dict(
             id=id,
@@ -120,3 +140,5 @@ class Database:
             files = await self.file.count_documents({"user_id": id})
             return files <= Var.LINK_LIMIT
         return False
+
+db = Database(Var.DATABASE_URL, Var.SESSION_NAME)

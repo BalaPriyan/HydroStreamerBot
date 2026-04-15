@@ -4,9 +4,8 @@ import aiohttp
 import aiofiles
 import urllib.parse
 from WebStreamer.vars import Var
-from WebStreamer.utils.database import Database
+from WebStreamer.utils.database import db
 from WebStreamer.utils.human_readable import humanbytes
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 async def render_page(db_id):
     file_data=await db.get_file(db_id)

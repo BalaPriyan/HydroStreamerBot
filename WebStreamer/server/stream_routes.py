@@ -1,5 +1,6 @@
-# Code optimized by fyaz05
+# Code optimized by fyaz05 & BalaPriyan
 # Code from Eyaadh
+
 
 
 import time
@@ -7,6 +8,7 @@ import math
 import logging
 import mimetypes
 import traceback
+import urllib.parse
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
 from WebStreamer.bot import multi_clients, work_loads, StreamBot
@@ -48,7 +50,7 @@ async def watch_handler(request: web.Request):
     except Exception as e:
         logging.critical(e)
         logging.debug(traceback.format_exc())
-        raise web.HTTPInternalServerError(text=str(e))
+        raise web.HTTPInternalServerError(text="Internal Server Error")
 
 @routes.get("/dl/{path}", allow_head=True)
 async def download_handler(request: web.Request):
@@ -65,7 +67,7 @@ async def download_handler(request: web.Request):
     except Exception as e:
         logging.critical(e)
         logging.debug(traceback.format_exc())
-        raise web.HTTPInternalServerError(text=str(e))
+        raise web.HTTPInternalServerError(text="Internal Server Error")
 
 @routes.get("/stream/{path}", allow_head=True)
 async def stream_handler(request: web.Request):
@@ -82,27 +84,30 @@ async def stream_handler(request: web.Request):
     except Exception as e:
         logging.critical(e)
         logging.debug(traceback.format_exc())
-        raise web.HTTPInternalServerError(text=str(e))
+        raise web.HTTPInternalServerError(text="Internal Server Error")
 
-class_cache = {}
 
 async def media_streamer(request: web.Request, db_id: str):
     """Stream media file."""
 
     range_header = request.headers.get("Range")
-    client_index = min(work_loads, key=work_loads.get)
+    from WebStreamer.utils.redis_broker import get_fastest_client
+    client_index = await get_fastest_client()
     fastest_client = multi_clients[client_index]
 
     if Var.MULTI_CLIENT:
         logging.info(f"Client {client_index} is now serving {request.headers.get('X-FORWARDED-FOR', request.remote)}")
 
-    if fastest_client in class_cache:
-        tg_connect = class_cache[fastest_client]
+    if "class_cache" not in request.app:
+        request.app["class_cache"] = {}
+
+    if fastest_client in request.app["class_cache"]:
+        tg_connect = request.app["class_cache"][fastest_client]
         logging.debug(f"Using cached ByteStreamer object for client {client_index}")
     else:
         logging.debug(f"Creating new ByteStreamer object for client {client_index}")
         tg_connect = utils.ByteStreamer(fastest_client)
-        class_cache[fastest_client] = tg_connect
+        request.app["class_cache"][fastest_client] = tg_connect
 
     logging.debug("before calling get_file_properties")
     file_id = await tg_connect.get_file_properties(db_id, multi_clients)
@@ -138,8 +143,10 @@ async def media_streamer(request: web.Request, db_id: str):
             "Content-Type": mime_type,
             "Content-Range": f"bytes {from_bytes}-{until_bytes}/{file_size}",
             "Content-Length": str(req_length),
-            "Content-Disposition": f'{disposition}; filename="{utils.get_name(file_id)}"',
+            "Content-Disposition": f'{disposition}; filename="{urllib.parse.quote(utils.get_name(file_id))}"',
             "Accept-Ranges": "bytes",
+            "X-Content-Type-Options": "nosniff",
+            "Access-Control-Allow-Origin": "*",
         },
     )
 

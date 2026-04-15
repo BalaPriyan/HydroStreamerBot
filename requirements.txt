@@ -6,3 +6,8 @@ motor
 aiofiles
 dnspython
 pymongo
+pydantic-settings
+uvloop; sys_platform != 'win32'
+winloop; sys_platform == 'win32'
+gunicorn
+redis

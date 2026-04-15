@@ -1,29 +1,34 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM python:3.9-slim as builder
 
-# Install git and necessary build tools
 RUN apt-get update && apt-get install -y \
     git \
     build-essential \
     libssl-dev \
-    && apt-get clean
+    && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables to prevent Python from writing .pyc files to disk
-# and to buffer stdout and stderr so that it behaves like a regular program
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the requirements file into the container
-COPY requirements.txt /app/
-
-# Install the dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
-COPY . /app/
+FROM python:3.9-slim
 
-# Run the application
-CMD ["python3", "-m", "WebStreamer"]
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/opt/venv/bin:$PATH"
+
+RUN groupadd -r botgroup && useradd -m -r -g botgroup botuser
+
+WORKDIR /app
+
+COPY --from=builder /opt/venv /opt/venv
+
+COPY . /app/
+RUN chown -R botuser:botgroup /opt/venv /app
+
+USER botuser
+
+ENV PORT=8080
+
+CMD ["gunicorn", "WebStreamer.server:web_server", "--bind", "0.0.0.0:$PORT", "--worker-class", "aiohttp.GunicornWebWorker"]

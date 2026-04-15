@@ -1,4 +1,4 @@
-# Code optimized by fyaz05
+# Code optimized by fyaz05 & BalaPriyan
 # Code from SpringsFern
 
 from __future__ import annotations
@@ -11,10 +11,8 @@ from hydrogram.types import Message
 from hydrogram.file_id import FileId
 
 from WebStreamer.bot import StreamBot
-from WebStreamer.utils.database import Database
+from WebStreamer.utils.database import db
 from WebStreamer.vars import Var
-
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 async def get_file_ids(client: Client | bool, db_id: str, multi_clients) -> Optional[FileId]:
     logging.debug("Starting get_file_ids")

@@ -4,7 +4,7 @@
 from ..vars import Var
 from hydrogram import Client
 
-if Var.SECONDARY:
+if Var.SECONDARY or Var.RUN_MODE.upper() == "WEB":
     plugins=None
     no_updates=True
 else:    

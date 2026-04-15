@@ -1,4 +1,4 @@
-# Code optimized by fyaz05
+# Code optimized by fyaz05 & BalaPriyan
 # Code from SpringsFern
 
 import datetime
@@ -9,13 +9,10 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.utils.bot_utils import file_format
 from WebStreamer.vars import Var
 from WebStreamer.utils.Translation import Language, BUTTON
-from WebStreamer.utils.database import Database
+from WebStreamer.utils.database import db
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.server.exceptions import FIleNotFound
-
 from hydrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 @StreamBot.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):

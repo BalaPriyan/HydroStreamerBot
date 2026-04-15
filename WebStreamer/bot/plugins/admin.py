@@ -1,4 +1,4 @@
-# stats command added and code optimized by fyaz05
+# stats command added and code optimized by fyaz05 & BalaPriyan
 # Code from SpringsFern
 
 import os
@@ -14,13 +14,11 @@ from hydrogram.types import Message
 from hydrogram.enums.parse_mode import ParseMode
 
 from WebStreamer.utils.broadcast_helper import send_msg
-from WebStreamer.utils.database import Database
+from WebStreamer.utils.database import db
 from WebStreamer.bot import StreamBot, multi_clients, work_loads
 from WebStreamer.utils.file_properties import get_media_from_message
 from WebStreamer.vars import Var
 from WebStreamer import utils, __version__, StartTime
-
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 broadcast_ids = {}
 
 def get_readable_time(seconds: int) -> str:

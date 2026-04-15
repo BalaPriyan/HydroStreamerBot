@@ -1,17 +1,55 @@
-<!-- Code by fyaz05 -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:image" content="https://cdn.jsdelivr.net/gh/fyaz05/Resources@main/HydroStreamerBot/live.png" itemprop="thumbnailUrl">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>%s</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Delius">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
+<body class="bg-zinc-950 text-zinc-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden p-8 text-center relative">
+        <div class="mx-auto w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mb-6 border border-zinc-700 shadow-inner">
+            <i data-lucide="file" class="w-8 h-8 text-zinc-400"></i>
+        </div>
+        
+        <h1 class="text-xl font-semibold mb-4 text-zinc-100 break-all">%s</h1>
+        
+        <div class="mb-8">
+            <a href="%s" class="inline-flex items-center gap-1.5 py-1.5 px-4 bg-zinc-800 border border-zinc-700 rounded-full hover:bg-zinc-700 transition">
+                <i data-lucide="hard-drive" class="w-4 h-4 text-zinc-400"></i>
+                <span class="text-xs font-semibold text-zinc-200 uppercase tracking-wider">%s</span>
+            </a>
+        </div>
 
-<body>
+        <button onclick="downloadFile()" class="w-full bg-zinc-100 text-zinc-900 hover:bg-zinc-200 transition-colors font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-sm mb-4">
+            <i data-lucide="download" class="w-5 h-5 cursor-pointer"></i> Download File
+        </button>
+
+        <button onclick="copyToClipboard()" class="w-full bg-zinc-800 text-zinc-100 hover:bg-zinc-700 transition-colors font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 border border-zinc-700">
+            <i data-lucide="link" class="w-5 h-5"></i> Copy Share Link
+        </button>
+    </div>
+
+    <div id="toast" class="fixed bottom-4 right-4 bg-zinc-800 border border-zinc-700 text-zinc-100 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
+        <i data-lucide="check-circle" class="text-emerald-500 w-5 h-5"></i>
+        <span class="text-sm font-medium">Link copied to clipboard</span>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function downloadFile() {
+            window.location.href = window.location.href;
+        }
+        function copyToClipboard() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+            });
+        }
+    </script>
 </body>
 </html>
